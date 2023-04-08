@@ -12,6 +12,11 @@ class Serialize
 public:
     Serialize() : m_oss(std::ios::binary | std::ios::out) {}
 
+    void Reset()
+    {
+        m_oss.str("");
+    }
+
     template <typename T>
     Serialize& operator<<(const T& t)
     {

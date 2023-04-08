@@ -6,6 +6,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <cstring>
+#include <iostream>
 
 namespace common
 {
@@ -44,11 +45,8 @@ void Reader::Read(std::string &data)
     // 读数据 size + data
     size_t size;
     memcpy(&size, shm_ptr_, sizeof(size_t));
-    char *buf = new char[size + 1];
-    memcpy(buf, (char *)shm_ptr_ + sizeof(size_t), size);
-    buf[size] = '\0';
-    data = buf;
-    delete[] buf;
+    data.resize(size);
+    memcpy((char *)data.c_str(), (char *)shm_ptr_ + sizeof(size_t), size);
 
     // 解读锁
     rwlock_.ReadUnlock();

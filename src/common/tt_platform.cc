@@ -13,7 +13,7 @@ void Publisher::Publish(std::string data)
     writer_->Write(data);
 }
 
-Subscriber::Subscriber(std::string topic, size_t max_size, std::function<void(std::string)> callback, float period)
+Subscriber::Subscriber(std::string topic, size_t max_size, std::function<void(const std::string &)> callback, float period)
 {
     reader_ = std::make_unique<Reader>(topic, max_size);
     if(period > 0.0)
@@ -41,7 +41,7 @@ void Platform::CreatePublisher(std::string topic, size_t max_size)
 
 void Platform::CreateSubscriber(
     std::string topic, size_t max_size,
-    std::function<void(std::string)> callback,
+    std::function<void(const std::string &)> callback,
     float period)
 {
     if (m_subscribers.find(topic) == m_subscribers.end())

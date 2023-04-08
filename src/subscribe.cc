@@ -9,23 +9,21 @@ void TestSubscribe()
     std::string topic = "/test";
     size_t subscribe_size = 1024;
     common::Platform::getInstance().CreateSubscriber(topic, subscribe_size, [](std::string data){
-        std::cout << "Subscribe: " << data << std::endl;
+        std::cout << "Subscribe: " << data << " " << data.size() << std::endl;
     }, 1.0);
 
     common::Platform::getInstance().Spin();
 }
-
 
 void TestDeserialize()
 {
     std::string topic = "/test";
     size_t subscribe_size = 1024;
     common::Platform::getInstance().CreateSubscriber(topic, subscribe_size, [](std::string data){
-        std::cout << "Subscribe: " << data << std::endl;
-        // common::Deserialize deserialize(data);
-        // Point point;
-        // deserialize >> point;
-        // std::cout << "Subscribe: " << point << std::endl;
+        common::Deserialize deserialize(data);
+        Point point;
+        deserialize >> point;
+        std::cout << "Subscribe: " << point << std::endl;
     }, 1.0);
 
     common::Platform::getInstance().Spin();

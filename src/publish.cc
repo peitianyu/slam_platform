@@ -18,7 +18,7 @@ void TestPublic()
         std::string out = data + std::to_string(cnt++);
         common::Platform::getInstance().Publish(topic, out);
 
-        std::cout << "Publish: " << out << std::endl;
+        std::cout << "Publish: " << out << " " << out.size() << std::endl;
 
         common::RateSleep(1.0);
     }
@@ -31,20 +31,27 @@ void TestSerialize()
     size_t public_size = 1024;
     common::Platform::getInstance().CreatePublisher(topic, public_size);
 
-    while(true)
-    {
-        Point point(1.0, 2.0, 3.0, 4.0);
 
-        common::Serialize serialize;
-        serialize << point;
+    Point point(1.0, 2.0, 3.0, 4.0);
 
-        std::string out = serialize.str();
-        common::Platform::getInstance().Publish(topic, out);
+    common::Serialize serialize;
+    serialize << point;
 
-        std::cout << "Publish: " << out << std::endl;
+    std::string out = serialize.str();
+    common::Platform::getInstance().Publish(topic, out);
 
-        common::RateSleep(1.0);
-    }
+    std::cout << "Publish: " << point << std::endl;
+
+    common::RateSleep(2.0);
+
+    serialize.Reset();
+    point = Point(5.0, 6.0, 7.0, 8.0);
+    serialize << point;
+
+    out = serialize.str();
+    common::Platform::getInstance().Publish(topic, out);
+
+    std::cout << "Publish: " << point << std::endl;
 }
 
 

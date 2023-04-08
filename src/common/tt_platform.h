@@ -28,15 +28,16 @@ private:
 class Subscriber
 {
 public:
-    Subscriber(std::string topic, size_t max_size = 10 * MB_1, 
-                std::function<void(std::string)> callback = [](std::string){}, 
-                float period = -1.0);
+    Subscriber(
+        std::string topic, size_t max_size = 10 * MB_1,
+        std::function<void(const std::string &)> callback = [](const std::string &) {},
+        float period = -1.0);
 
     void Subscribe();
 private:
     std::unique_ptr<Reader> reader_;
     std::unique_ptr<Timer> timer_;
-    std::function <void(std::string)> callback_;
+    std::function <void(const std::string&)> callback_;
 };
 
 class Platform
@@ -50,8 +51,8 @@ public:
     void CreatePublisher(std::string topic, size_t max_size = 10 * MB_1);
 
     void CreateSubscriber(
-        std::string topic, size_t max_size = 10 * MB_1, 
-        std::function<void(std::string)> callback = [](std::string) {}, 
+        std::string topic, size_t max_size = 10 * MB_1,
+        std::function<void(const std::string &)> callback = [](const std::string &) {},
         float period = -1.0);
 
     void Publish(std::string topic, const std::string& data);
