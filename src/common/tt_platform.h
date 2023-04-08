@@ -40,6 +40,8 @@ private:
     std::function <void(const std::string&)> callback_;
 };
 
+
+// TODO: Request/Response实现
 class Platform
 {
 public:
