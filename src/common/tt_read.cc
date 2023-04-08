@@ -23,6 +23,8 @@ Reader::Reader(std::string topic, size_t max_size):rwlock_(topic), max_size_(max
     // 将共享内存对象映射到进程的虚拟地址空间
     shm_ptr_ = mmap(NULL, max_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd_, 0);
     tt_assert(shm_ptr_ != MAP_FAILED);
+
+    rwlock_.ReadUnlock();
 }
 
 Reader::~Reader()
@@ -34,7 +36,7 @@ Reader::~Reader()
     tt_assert(close(shm_fd_) != -1);
 }
 
-void Reader::ReadData(std::string &data)
+void Reader::Read(std::string &data)
 {
     // 加读锁
     rwlock_.ReadLock();
@@ -52,20 +54,11 @@ void Reader::ReadData(std::string &data)
     rwlock_.ReadUnlock();
 }
 
-void Reader::Read(std::string &data, const float rate)
+std::string Reader::Read()
 {
-    if (rate < 0.0)
-    {
-        ReadData(data);
-        return;
-    }
-
-    while(rate > 0.0)
-    {
-        ReadData(data);
-        RateSleep(rate);
-    }
+    std::string data;
+    Read(data);
+    return data;
 }
-
 
 } // namespace common

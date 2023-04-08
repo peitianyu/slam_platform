@@ -14,9 +14,9 @@ public:
 
     ~Reader();
 
-    void Read(std::string &data, const float rate = -1.0);
-private:
-    void ReadData(std::string &data);
+    void Read(std::string &data);
+
+    std::string Read();
 private:
     RWLock rwlock_;
     uint64_t max_size_;

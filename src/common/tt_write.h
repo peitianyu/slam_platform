@@ -14,9 +14,7 @@ public:
 
     ~Writer();
 
-    void Write(const std::string& data, float rate = -1.0);
-private:
-    void WriteData(const std::string& data);
+    void Write(std::string data);
 private:
     RWLock rwlock_;
     uint64_t max_size_;

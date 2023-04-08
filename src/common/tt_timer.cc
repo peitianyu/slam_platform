@@ -7,9 +7,8 @@ namespace common
 
 Timer::Timer(float period) : period_(period) {}
 
-void Timer::Init(float period)
+void Timer::Reset()
 {
-    period_ = period;
     gettimeofday(&last_time_, NULL);
 }
 

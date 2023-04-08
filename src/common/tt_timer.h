@@ -12,7 +12,7 @@ class Timer
 public:
     Timer(float period = 1.0);
 
-    void Init(float period = 1.0);
+    void Reset();
 
     bool IsTimeOut();
 private:

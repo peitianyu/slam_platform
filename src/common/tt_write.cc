@@ -6,6 +6,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <cstring>
+#include <iostream>
 
 namespace common
 {
@@ -23,6 +24,8 @@ Writer::Writer(std::string topic, uint64_t max_size):rwlock_(topic), max_size_(m
     // 将共享内存对象映射到进程的虚拟地址空间
     shm_ptr_ = mmap(NULL, max_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd_, 0);
     tt_assert(shm_ptr_ != MAP_FAILED);
+
+    rwlock_.WriteUnlock();
 }
 
 Writer::~Writer()
@@ -34,7 +37,7 @@ Writer::~Writer()
     tt_assert(close(shm_fd_) != -1);
 }
 
-void Writer::WriteData(const std::string& data)
+void Writer::Write(std::string data)
 {
     // 加写锁
     rwlock_.WriteLock();
@@ -46,21 +49,6 @@ void Writer::WriteData(const std::string& data)
 
     // 解写锁
     rwlock_.WriteUnlock();
-}
-
-void Writer::Write(const std::string& data, float rate)
-{
-    if (rate < 0.0)
-    {
-        WriteData(data);
-        return;
-    }
-
-    while(rate > 0.0)
-    {
-        WriteData(data);
-        RateSleep(rate);
-    }
 }
 
 } // namespace common

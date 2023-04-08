@@ -4,35 +4,70 @@
 #include"tt_singleton.h"
 #include"tt_write.h"
 #include"tt_read.h"
+#include"tt_serialize.h"
+#include"tt_timer.h"
 
 #include<iostream>
 #include<vector>
+#include<map>
+#include<memory>
+#include <functional>
 
 namespace common
 {
+class Publisher
+{
+public:
+    Publisher(std::string topic, size_t max_size = 10 * MB_1);
+
+    void Publish(std::string data);
+private:
+    std::unique_ptr<Writer> writer_;
+};
+
+class Subscriber
+{
+public:
+    Subscriber(std::string topic, size_t max_size = 10 * MB_1, 
+                std::function<void(std::string)> callback = [](std::string){}, 
+                float period = -1.0);
+
+    void Subscribe();
+private:
+    std::unique_ptr<Reader> reader_;
+    std::unique_ptr<Timer> timer_;
+    std::function <void(std::string)> callback_;
+};
 
 class Platform
 {
 public:
-    static Platform* GetInstance()
-    {
-        static Singleton<Platform> s_instance;
-        return s_instance.Get();
+    static Platform &getInstance(){
+        static Platform instance;
+        return instance;
     }
 
-    template<typename T>
-    void Publish(const std::string& topic, const T& msg, const float rate = -1.0);
+    void CreatePublisher(std::string topic, size_t max_size = 10 * MB_1);
 
-    template<typename T>
-    void Subscribe(const std::string& topic, /*回调*/ T& msg, const float rate = -1.0);
-    {
-        readers_.emplace_back(topic);
-    }
+    void CreateSubscriber(
+        std::string topic, size_t max_size = 10 * MB_1, 
+        std::function<void(std::string)> callback = [](std::string) {}, 
+        float period = -1.0);
 
+    void Publish(std::string topic, const std::string& data);
+
+    void Spin();
+
+    void SpinOnce();
 private:
-    std::vector<Writer> writers_;
-    std::vector<Reader> readers_;
+    Platform() {}
+    Platform(const Platform &) = delete;
+    Platform &operator=(const Platform &) = delete;
+
+    std::map<std::string, std::unique_ptr<Publisher>> m_publishers;
+    std::map<std::string, std::unique_ptr<Subscriber>> m_subscribers;
 };
+
 
 } // namespace common
 
