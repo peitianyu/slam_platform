@@ -1,24 +1,20 @@
 #ifndef __COMMON_PLATFORM_H__
 #define __COMMON_PLATFORM_H__
 
-#include"tt_singleton.h"
+#include"tt_timer.h"
 #include"tt_write.h"
 #include"tt_read.h"
-#include"tt_serialize.h"
-#include"tt_timer.h"
 
-#include<iostream>
-#include<vector>
 #include<map>
 #include<memory>
-#include <functional>
+#include<functional>
 
 namespace common
 {
 class Publisher
 {
 public:
-    Publisher(std::string topic, size_t max_size = 10 * MB_1);
+    Publisher(std::string topic, size_t max_size);
 
     void Publish(std::string data);
 private:
@@ -29,8 +25,8 @@ class Subscriber
 {
 public:
     Subscriber(
-        std::string topic, size_t max_size = 10 * MB_1,
-        std::function<void(const std::string &)> callback = [](const std::string &) {},
+        std::string topic, size_t max_size,
+        std::function<void(const std::string &)> callback,
         float period = -1.0);
 
     void Subscribe();
@@ -41,7 +37,6 @@ private:
 };
 
 
-// TODO: Request/Response实现
 class Platform
 {
 public:
@@ -50,11 +45,11 @@ public:
         return instance;
     }
 
-    void CreatePublisher(std::string topic, size_t max_size = 10 * MB_1);
+    void CreatePublisher(std::string topic, size_t max_size);
 
     void CreateSubscriber(
-        std::string topic, size_t max_size = 10 * MB_1,
-        std::function<void(const std::string &)> callback = [](const std::string &) {},
+        std::string topic, size_t max_size, 
+        std::function<void(const std::string &)> callback, 
         float period = -1.0);
 
     void Publish(std::string topic, const std::string& data);

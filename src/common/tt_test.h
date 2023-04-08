@@ -5,9 +5,6 @@
 #include <stdlib.h>
 #include <sstream>
 
-namespace common
-{
-
 
 class Tester 
 {
@@ -76,13 +73,13 @@ public:
 };
 
 
-#define ASSERT_TRUE(c) ::lut::Tester(__FILE__, __LINE__).Is((c), #c)
-#define ASSERT_EQ(a,b) ::lut::Tester(__FILE__, __LINE__).IsEq((a),(b))
-#define ASSERT_NE(a,b) ::lut::Tester(__FILE__, __LINE__).IsNe((a),(b))
-#define ASSERT_GE(a,b) ::lut::Tester(__FILE__, __LINE__).IsGe((a),(b))
-#define ASSERT_GT(a,b) ::lut::Tester(__FILE__, __LINE__).IsGt((a),(b))
-#define ASSERT_LE(a,b) ::lut::Tester(__FILE__, __LINE__).IsLe((a),(b))
-#define ASSERT_LT(a,b) ::lut::Tester(__FILE__, __LINE__).IsLt((a),(b))
+#define ASSERT_TRUE(c) Tester(__FILE__, __LINE__).Is((c), #c)
+#define ASSERT_EQ(a,b) Tester(__FILE__, __LINE__).IsEq((a),(b))
+#define ASSERT_NE(a,b) Tester(__FILE__, __LINE__).IsNe((a),(b))
+#define ASSERT_GE(a,b) Tester(__FILE__, __LINE__).IsGe((a),(b))
+#define ASSERT_GT(a,b) Tester(__FILE__, __LINE__).IsGt((a),(b))
+#define ASSERT_LE(a,b) Tester(__FILE__, __LINE__).IsLe((a),(b))
+#define ASSERT_LT(a,b) Tester(__FILE__, __LINE__).IsLt((a),(b))
 
 #define TEST(base,name)                                                             \
 class _test_##base##name                                                            \
@@ -100,7 +97,7 @@ class _register_##base##name                                                    
 public:                                                                             \
 	_register_##base##name()                                                        \
 	{                                                                               \
-		::lut::RegisterTest(#base, #name, &_test_##base##name::Run);                \
+		RegisterTest(#base, #name, &_test_##base##name::Run);               	 	\
 	}                                                                               \
 };                                                                                  \
 _register_##base##name auto_register_##base##name;                                  \
@@ -112,6 +109,5 @@ bool RegisterTest(const char *base, const char* name, void (*func)());
 int RunAllTests();
 
 
-} // namespace common
 
 #endif // __COMMON_TEST_H__

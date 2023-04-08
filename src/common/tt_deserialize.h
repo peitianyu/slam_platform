@@ -32,11 +32,6 @@ public:
         }
         return *this;
     }
-
-    size_t size() const
-    {
-        return m_str.size() - m_pos;
-    }
 private:
     const std::string& m_str;
     size_t m_pos;

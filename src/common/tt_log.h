@@ -3,9 +3,6 @@
 
 #include<iostream>
 
-namespace common
-{
-
 template <typename T>
 std::ostream &STD_COUT(std::ostream &os, const T &arg)
 {
@@ -24,6 +21,5 @@ std::ostream &STD_COUT(std::ostream &os, const T &firstArg, const Types &...args
 #define LOG_WARN(...) STD_COUT(std::cout, "\033[35m[", __FUNCTION__, __LINE__, "] : ", __VA_ARGS__, "\033[0m")
 #define LOG_ERROR(...) STD_COUT(std::cout, "\033[31m[", __FUNCTION__, __LINE__, "] : ", __VA_ARGS__, "\033[0m")
 
-} // namespace common
 
 #endif // __COMMON_LOG_H__

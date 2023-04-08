@@ -6,8 +6,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-namespace common
-{
 
 struct TestContext
 {
@@ -54,6 +52,3 @@ int RunAllTests()
 	fprintf(stderr, "==== PASSED %d tests\n", num);
 	return 0;
 }
-
-
-}//namespace common

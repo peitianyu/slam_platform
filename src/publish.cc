@@ -3,62 +3,27 @@
 #include "tt_sleep.h"
 #include "point.h"
 #include "tt_serialize.h"
+#include "tt_log.h"
 
 
-void TestPublic()
+void Test()
 {
-    std::string topic = "test";
-    size_t public_size = 1024;
-    common::Platform::getInstance().CreatePublisher(topic, public_size);
-
-    std::string data = "hello world ";
-    while(true)
-    {
-        static uint cnt = 0;
-        std::string out = data + std::to_string(cnt++);
-        common::Platform::getInstance().Publish(topic, out);
-
-        std::cout << "Publish: " << out << " " << out.size() << std::endl;
-
-        common::RateSleep(1.0);
-    }
-}
-
-
-void TestSerialize()
-{
+    Point point(1, 2, 3, 4);
     std::string topic = "/test";
-    size_t public_size = 1024;
-    common::Platform::getInstance().CreatePublisher(topic, public_size);
-
-
-    Point point(1.0, 2.0, 3.0, 4.0);
+    common::Platform::getInstance().CreatePublisher(topic, sizeof(Point));
 
     common::Serialize serialize;
     serialize << point;
 
-    std::string out = serialize.str();
-    common::Platform::getInstance().Publish(topic, out);
+    common::Platform::getInstance().Publish(topic, serialize.str());
 
-    std::cout << "Publish: " << point << std::endl;
+    LOG_DEBUG("Publish: ", point) << std::endl;
 
     common::RateSleep(2.0);
-
-    serialize.Reset();
-    point = Point(5.0, 6.0, 7.0, 8.0);
-    serialize << point;
-
-    out = serialize.str();
-    common::Platform::getInstance().Publish(topic, out);
-
-    std::cout << "Publish: " << point << std::endl;
 }
-
-
 
 int main()
 {
-    // TestPublic();
-    TestSerialize();
+    Test();
     return 0;
 }

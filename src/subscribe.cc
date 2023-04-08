@@ -3,35 +3,34 @@
 #include "tt_sleep.h"
 #include "point.h"
 #include "tt_deserialize.h"
+#include "tt_test.h"
+#include "tt_log.h"
 
-void TestSubscribe()
+void Callback(std::string data)
 {
-    std::string topic = "/test";
-    size_t subscribe_size = 1024;
-    common::Platform::getInstance().CreateSubscriber(topic, subscribe_size, [](std::string data){
-        std::cout << "Subscribe: " << data << " " << data.size() << std::endl;
-    }, 1.0);
+    common::Deserialize deserialize(data);
+    Point point;
+    deserialize >> point;
+    
+    LOG_DEBUG("Subscribe: ", point) << std::endl;
 
-    common::Platform::getInstance().Spin();
+    ASSERT_EQ(point.x, 1);
+    ASSERT_EQ(point.y, 2);
+    ASSERT_EQ(point.z, 3);
+    ASSERT_EQ(point.intensity, 2); // 测试失败
 }
 
-void TestDeserialize()
+TEST(Platform, Deserialize)
 {
     std::string topic = "/test";
-    size_t subscribe_size = 1024;
-    common::Platform::getInstance().CreateSubscriber(topic, subscribe_size, [](std::string data){
-        common::Deserialize deserialize(data);
-        Point point;
-        deserialize >> point;
-        std::cout << "Subscribe: " << point << std::endl;
-    }, 1.0);
+    common::Platform::getInstance().CreateSubscriber(topic, sizeof(Point), Callback, 1.0);
 
-    common::Platform::getInstance().Spin();
+    // common::Platform::getInstance().Spin();
+    common::Platform::getInstance().SpinOnce();
 }
 
 int main()
 {
-    // TestSubscribe();
-    TestDeserialize();
+    RunAllTests();
     return 0;
 }
