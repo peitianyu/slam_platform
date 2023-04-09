@@ -1,7 +1,7 @@
-file(GLOB_RECURSE ALL_LIBRIRY_SRCS ${PROJECT_SOURCE_DIR}/core/src/platform/*.cc ${PROJECT_SOURCE_DIR}/core/src/common/*.cc)
+file(GLOB_RECURSE ALL_LIBRIRY_SRCS ${PROJECT_SOURCE_DIR}/src/core/src/platform/*.cc ${PROJECT_SOURCE_DIR}/src/core/src/common/*.cc)
 
 # 添加.h文件
-include_directories(${PROJECT_SOURCE_DIR}/core/src)
+include_directories(${PROJECT_SOURCE_DIR}/src/core/src)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/install/test)
 

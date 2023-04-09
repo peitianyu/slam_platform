@@ -1,6 +1,7 @@
 #include"tt_read.h"
 #include"common/tt_assert.h"
 #include"common/tt_sleep.h"
+#include"common/tt_crc.h"
 
 #include <unistd.h>
 #include <sys/mman.h>
@@ -45,8 +46,16 @@ void Reader::Read(std::string &data)
     // 读数据 size + data
     size_t size;
     memcpy(&size, shm_ptr_, sizeof(size_t));
-    data.resize(size);
+
+    size_t data_size = size - sizeof(uint16_t);
+    data.resize(data_size);
     memcpy((char *)data.c_str(), (char *)shm_ptr_ + sizeof(size_t), size);
+
+    // 校验crc
+    uint16_t crc;
+    memcpy(&crc, (char *)shm_ptr_ + sizeof(size_t) + size, sizeof(uint16_t));
+
+    tt_assert(common::crc16::CheckCRC((uint8_t *)data.c_str(), data.size(), crc));
 
     // 解读锁
     rwlock_.ReadUnlock();

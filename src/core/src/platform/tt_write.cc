@@ -1,6 +1,7 @@
 #include "tt_write.h"
 #include "common/tt_assert.h"
 #include "common/tt_sleep.h"
+#include "common/tt_crc.h"
 
 #include <unistd.h>
 #include <sys/mman.h>
@@ -43,9 +44,11 @@ void Writer::Write(std::string data)
     rwlock_.WriteLock();
 
     // 写数据 size + data
-    size_t size = data.size();
+    size_t size = data.size() + sizeof(uint16_t);
     memcpy(shm_ptr_, &size, sizeof(size_t));
     memcpy((char *)shm_ptr_ + sizeof(size_t), data.c_str(), size);
+    uint16_t crc = common::crc16::Update((uint8_t *)data.c_str(), data.size());
+    memcpy((char *)shm_ptr_ + sizeof(size_t) + size, &crc, sizeof(uint16_t));
 
     // 解写锁
     rwlock_.WriteUnlock();
