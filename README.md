@@ -8,41 +8,45 @@ void Test()
 {
     Point point(1, 2, 3, 4);
     std::string topic = "/test";
-  
-    // 创建publisher
-    common::Platform::getInstance().CreatePublisher(topic, sizeof(Point));
+    platform::Platform::getInstance().CreatePublisher(topic, sizeof(Point));
 
-    // 序列化Point
-    common::Serialize serialize;
+    platform::Serialize serialize;
     serialize << point;
 
-    common::Platform::getInstance().Publish(topic, serialize.str());
+    platform::Platform::getInstance().Publish(topic, serialize.str());
+
+    LOG_DEBUG("Publish: ", point) << std::endl;
+
+    common::RateSleep(2.0);
 }
 
 
 // subscribe.cc
 
-// 实现回调
-void Callback(const std::string& data)
+void Callback(const std::string &data)
 {
-    // 反序列化 
-    common::Deserialize deserialize(data);
+    platform::Deserialize deserialize(data);
     Point point;
     deserialize >> point;
-  
+    
+    LOG_INFO("Subscribe: ", point) << std::endl;
+    LOG_WARN("Subscribe: ", point) << std::endl;
     LOG_DEBUG("Subscribe: ", point) << std::endl;
+    LOG_ERROR("Subscribe: ", point) << std::endl;
+
+    ASSERT_EQ(point.x, 1);
+    ASSERT_EQ(point.y, 2);
+    ASSERT_EQ(point.z, 3);
+    ASSERT_EQ(point.intensity, 2); // fail
 }
 
 TEST(Platform, Deserialize)
 {
     std::string topic = "/test";
+    platform::Platform::getInstance().CreateSubscriber(topic, sizeof(Point), Callback, 1.0);
 
-    // 注册订阅者
-    common::Platform::getInstance().CreateSubscriber(topic, sizeof(Point), Callback, 1.0);
-
-    // 类似ros::spin()与spinOnce()
-    // common::Platform::getInstance().Spin();
-    common::Platform::getInstance().SpinOnce();
+    // platform::Platform::getInstance().Spin();
+    platform::Platform::getInstance().SpinOnce();
 }
 ```
 
