@@ -1,10 +1,10 @@
-#ifndef __COMMON_DESERIALIZE_H__
-#define __COMMON_DESERIALIZE_H__
+#ifndef __PLATFORM_DESERIALIZE_H__
+#define __PLATFORM_DESERIALIZE_H__
 
 #include <sstream> 
 #include <vector>
 
-namespace common
+namespace platform
 {
 class Deserialize
 {
@@ -37,6 +37,6 @@ private:
     size_t m_pos;
 };
 
-} // namespace common
+} // namespace platform
 
-#endif // __COMMON_DESERIALIZE_H__
+#endif // __PLATFORM_DESERIALIZE_H__

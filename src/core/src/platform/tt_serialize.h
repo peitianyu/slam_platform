@@ -1,10 +1,10 @@
-#ifndef __COMMON_SERIALIZE_H__
-#define __COMMON_SERIALIZE_H__
+#ifndef __PLATFORM_SERIALIZE_H__
+#define __PLATFORM_SERIALIZE_H__
 
 #include <sstream> 
 #include <vector>
 
-namespace common
+namespace platform
 {
 
 class Serialize
@@ -42,6 +42,6 @@ private:
     std::ostringstream m_oss;
 };
 
-} // namespace common
+} // namespace platform
 
-#endif // __COMMON_SERIALIZE_H__
+#endif // __PLATFORM_SERIALIZE_H__

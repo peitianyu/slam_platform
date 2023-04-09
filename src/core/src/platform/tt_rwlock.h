@@ -1,11 +1,11 @@
-#ifndef __COMMON_RWLOCK_H__
-#define __COMMON_RWLOCK_H__
+#ifndef __PLATFORM_RWLOCK_H__
+#define __PLATFORM_RWLOCK_H__
 
 #include <string>
 #include <semaphore.h>
 #include <fcntl.h>
 
-namespace common
+namespace platform
 {
 
 class RWLock {
@@ -28,11 +28,11 @@ private:
 
 
 
-} // namespace common
+} // namespace platform
 
 
 
 
 
 
-#endif // __COMMON_RWLOCK_H__
+#endif // __PLATFORM_RWLOCK_H__

@@ -1,7 +1,7 @@
 #include"tt_timer.h"
 #include <string>
 
-namespace common
+namespace platform
 {
 
 

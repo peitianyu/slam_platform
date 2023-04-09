@@ -1,6 +1,6 @@
-#include "tt_write.h"
-#include "tt_assert.h"
-#include "tt_sleep.h"
+#include"tt_read.h"
+#include"common/tt_assert.h"
+#include"common/tt_sleep.h"
 
 #include <unistd.h>
 #include <sys/mman.h>
@@ -8,10 +8,10 @@
 #include <cstring>
 #include <iostream>
 
-namespace common
+namespace platform
 {
 
-Writer::Writer(std::string topic, uint64_t max_size):rwlock_(topic), max_size_(max_size)
+Reader::Reader(std::string topic, size_t max_size):rwlock_(topic), max_size_(max_size)
 {
     // 创建或打开共享内存对象
     shm_fd_ = shm_open((topic + "_shm").c_str(), O_CREAT | O_RDWR, 0666);
@@ -25,10 +25,10 @@ Writer::Writer(std::string topic, uint64_t max_size):rwlock_(topic), max_size_(m
     shm_ptr_ = mmap(NULL, max_size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd_, 0);
     tt_assert(shm_ptr_ != MAP_FAILED);
 
-    rwlock_.WriteUnlock();
+    rwlock_.ReadUnlock();
 }
 
-Writer::~Writer()
+Reader::~Reader()
 {
     // 取消映射共享内存对象
     tt_assert(munmap(shm_ptr_, max_size_) != -1);
@@ -37,18 +37,26 @@ Writer::~Writer()
     tt_assert(close(shm_fd_) != -1);
 }
 
-void Writer::Write(std::string data)
+void Reader::Read(std::string &data)
 {
-    // 加写锁
-    rwlock_.WriteLock();
+    // 加读锁
+    rwlock_.ReadLock();
 
-    // 写数据 size + data
-    size_t size = data.size();
-    memcpy(shm_ptr_, &size, sizeof(size_t));
-    memcpy((char *)shm_ptr_ + sizeof(size_t), data.c_str(), size);
+    // 读数据 size + data
+    size_t size;
+    memcpy(&size, shm_ptr_, sizeof(size_t));
+    data.resize(size);
+    memcpy((char *)data.c_str(), (char *)shm_ptr_ + sizeof(size_t), size);
 
-    // 解写锁
-    rwlock_.WriteUnlock();
+    // 解读锁
+    rwlock_.ReadUnlock();
 }
 
-} // namespace common
+std::string Reader::Read()
+{
+    std::string data;
+    Read(data);
+    return data;
+}
+
+} // namespace platform

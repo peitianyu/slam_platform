@@ -1,10 +1,10 @@
-#ifndef __COMMON_WRITE_H__
-#define __COMMON_WRITE_H__
+#ifndef __PLATFORM_WRITE_H__
+#define __PLATFORM_WRITE_H__
 
 #include"tt_rwlock.h"
 #include"tt_define.h"
 
-namespace common
+namespace platform
 {
 
 class Writer
@@ -22,6 +22,6 @@ private:
     void *shm_ptr_;
 };
 
-} // namespace common
+} // namespace platform
 
-#endif  // __COMMON_WRITE_H__
+#endif  // __PLATFORM_WRITE_H__

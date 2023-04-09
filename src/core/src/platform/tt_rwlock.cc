@@ -1,7 +1,7 @@
 #include "tt_rwlock.h"
-#include "tt_assert.h"
+#include "common/tt_assert.h"
 
-namespace common
+namespace platform
 {
 
 RWLock::RWLock(std::string topic){
@@ -45,7 +45,7 @@ void RWLock::WriteUnlock() {
     tt_assert(sem_post(sem_write_ptr_) != -1);
 }
 
-} // namespace common
+} // namespace platform
 
 
 

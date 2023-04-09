@@ -1,10 +1,10 @@
-#ifndef __COMMON_READ_H__
-#define __COMMON_READ_H__
+#ifndef __PLATFORM_READ_H__
+#define __PLATFORM_READ_H__
 
 #include"tt_rwlock.h"
 #include"tt_define.h"
 
-namespace common
+namespace platform
 {
 
 class Reader
@@ -24,6 +24,6 @@ private:
     void *shm_ptr_;
 };
 
-} // namespace common
+} // namespace platform
 
-#endif  // __COMMON_READ_H__
+#endif  // __PLATFORM_READ_H__

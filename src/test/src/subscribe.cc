@@ -1,13 +1,13 @@
 #include <iostream>
-#include "tt_platform.h"
+#include "platform/tt_platform.h"
+#include "platform/tt_deserialize.h"
+#include "common/tt_test.h"
+#include "common/tt_log.h"
 #include "point.h"
-#include "tt_deserialize.h"
-#include "tt_test.h"
-#include "tt_log.h"
 
 void Callback(const std::string &data)
 {
-    common::Deserialize deserialize(data);
+    platform::Deserialize deserialize(data);
     Point point;
     deserialize >> point;
     
@@ -25,10 +25,10 @@ void Callback(const std::string &data)
 TEST(Platform, Deserialize)
 {
     std::string topic = "/test";
-    common::Platform::getInstance().CreateSubscriber(topic, sizeof(Point), Callback, 1.0);
+    platform::Platform::getInstance().CreateSubscriber(topic, sizeof(Point), Callback, 1.0);
 
-    // common::Platform::getInstance().Spin();
-    common::Platform::getInstance().SpinOnce();
+    // platform::Platform::getInstance().Spin();
+    platform::Platform::getInstance().SpinOnce();
 }
 
 int main()

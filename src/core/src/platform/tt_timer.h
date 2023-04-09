@@ -1,9 +1,9 @@
-#ifndef __COMMON_TIMER_H__
-#define __COMMON_TIMER_H__
+#ifndef __PLATFORM_TIMER_H__
+#define __PLATFORM_TIMER_H__
 
 #include <sys/time.h>
 
-namespace common
+namespace platform
 {
 
 // 实现定时器中断
@@ -22,4 +22,4 @@ private:
 
 }
 
-#endif // __COMMON_TIMER_H__
+#endif // __PLATFORM_TIMER_H__
